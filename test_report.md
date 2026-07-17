@@ -12,6 +12,7 @@
 | `python -m compileall -q ...` | все модули компилируются |
 | `docker build -t aiprod-llm-service:local .` | образ собран |
 | HTTP-проверка контейнера | `/health` вернул 200, первый `/chat` вернул 200, повторный запрос пришёл из кеша |
+| Визуальная проверка Swagger | четыре читаемых скриншота: 200, cache hit, 422 и 503 |
 
 Контрактный eval привязан к dataset `aiprod-service-contract-v1`, схеме `chat-api-v1` и версии evaluator `contract-eval-v1`. SHA-256 dataset: `a85821c7f5b4bb76aec0b1fb9648ea739526ecb45a5aac7c75f3b3a5ce5de4e4`.
 

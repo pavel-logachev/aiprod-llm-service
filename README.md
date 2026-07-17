@@ -113,3 +113,11 @@ docker run --rm -p 8000:8000 `
 
 Swagger UI: <http://127.0.0.1:8000/docs>
 
+## Демонстрация сценариев
+
+Скриншоты получены из Swagger UI запущенного Docker-контейнера:
+
+- [успешный ответ, HTTP 200](evidence/01-success.png);
+- [повторный запрос из кеша, `cached=true`](evidence/02-cache-hit.png);
+- [ошибка валидации, HTTP 422](evidence/03-validation-error.png);
+- [fallback при недоступной модели, HTTP 503](evidence/04-provider-fallback.png).
