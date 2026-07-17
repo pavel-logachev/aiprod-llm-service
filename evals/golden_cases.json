@@ -1,0 +1,12 @@
+{
+  "dataset_version": "aiprod-service-contract-v1",
+  "privacy_class": "synthetic",
+  "cases": [
+    {"case_id": "valid_request", "type": "normal", "expected_status": 200},
+    {"case_id": "cache_repeat", "type": "recovery", "expected_status": 200},
+    {"case_id": "blank_message", "type": "boundary", "expected_status": 422},
+    {"case_id": "oversized_message", "type": "adversarial", "expected_status": 422},
+    {"case_id": "provider_failure", "type": "recovery", "expected_status": 503}
+  ]
+}
+
