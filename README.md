@@ -103,6 +103,25 @@ python -m compileall -q .
 
 ## Docker
 
+### Запуск всего решения одной командой
+
+Скопируйте шаблон настроек, при необходимости измените значения и запустите API вместе с интерфейсом:
+
+```powershell
+Copy-Item .env.example .env
+docker compose up --build
+```
+
+После запуска доступны:
+
+- Streamlit UI: <http://127.0.0.1:8501>;
+- Swagger UI: <http://127.0.0.1:8000/docs>;
+- health check: <http://127.0.0.1:8000/health>.
+
+Локальный запуск использует профиль `APP_ENV=development` из `.env.example`, а контейнеры — `APP_ENV=production`. Все URL, параметры модели, таймауты, ретраи и TTL читаются из окружения. Файл `.env` исключён из Git.
+
+### Запуск только API-контейнера
+
 ```powershell
 docker build -t aiprod-llm-service:local .
 docker run --rm -p 8000:8000 `

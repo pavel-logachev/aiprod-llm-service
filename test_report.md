@@ -6,12 +6,13 @@
 
 | Проверка | Результат |
 | --- | --- |
-| `python -m unittest discover -s tests -v` | 21 из 21 теста пройдено |
+| `python -m unittest discover -s tests -v` | 23 из 23 тестов пройдено |
 | `python evals/run_eval.py` | 5 из 5 контрактных сценариев, критических ошибок 0 |
 | `python evals/run_shopping_eval.py` | 3 из 3 реальных LLM-сценариев, критических ошибок 0 |
 | `ruff check .` | замечаний нет |
 | `python -m compileall -q ...` | все модули компилируются |
 | `docker build -t aiprod-llm-service:local .` | образ собран |
+| `docker compose up --build -d` | API и Streamlit собраны одной командой, оба контейнера healthy |
 | HTTP-проверка контейнера | `/health` вернул 200, первый `/chat` вернул 200, повторный запрос пришёл из кеша |
 | Визуальная проверка Swagger | четыре читаемых скриншота: 200, cache hit, 422 и 503 |
 | Визуальная проверка Streamlit | десктоп 1280 px, мобильный экран 390 px, успех и ошибка валидации |
@@ -21,6 +22,8 @@
 Eval интерфейса привязан к dataset `shopping-ui-golden-v1`, схеме `shopping-ui-text-v1`, evaluator `shopping-eval-v1`, модели `qwen2.5-coder:7b` и температуре `0.2`. SHA-256 dataset: `cb212ac48b812f07bee236e2c04fd700afff701d57b12cb55c2349e0017e01ec`; prompt: `bff011ba5759c180ab2dee565d3f2a55dad86a42dcc3ccd8b884b52c4c6ae640`. Латентность трёх реальных случаев: 3258–18806 мс, стоимость локальной Ollama — 0. Пользователь остаётся финальным проверяющим состава покупок перед использованием результата.
 
 Реальный запрос из Docker-контейнера к Ollama занял 3312 мс. Идентичный повторный запрос вернулся за 0 мс с `cached=true`.
+
+Финальный Compose-прогон подтвердил: API `/health` — 200, Streamlit `/_stcore/health` — 200, первый запрос `cached=false`, идентичный повторный запрос `cached=true`. После проверки контейнеры и временная Compose-сеть остановлены и удалены.
 
 ## Ручной чек-лист
 
