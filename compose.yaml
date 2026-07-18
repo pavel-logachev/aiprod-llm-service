@@ -1,0 +1,45 @@
+x-llm-environment: &llm-environment
+  APP_ENV: production
+  LLM_BASE_URL: ${LLM_BASE_URL:-http://host.docker.internal:11434/v1}
+  LLM_API_KEY: ${LLM_API_KEY:-ollama}
+  LLM_MODEL: ${LLM_MODEL:-qwen2.5-coder:7b}
+  LLM_TEMPERATURE: ${LLM_TEMPERATURE:-0.2}
+  LLM_TIMEOUT_SECONDS: ${LLM_TIMEOUT_SECONDS:-20}
+  LLM_MAX_ATTEMPTS: ${LLM_MAX_ATTEMPTS:-3}
+  CACHE_TTL_SECONDS: ${CACHE_TTL_SECONDS:-600}
+  LOG_RAW_CONTENT: ${LOG_RAW_CONTENT:-false}
+
+services:
+  api:
+    build:
+      context: .
+    environment: *llm-environment
+    ports:
+      - "8000:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  ui:
+    build:
+      context: .
+    command:
+      - streamlit
+      - run
+      - streamlit_app.py
+      - --server.address=0.0.0.0
+      - --server.port=8501
+      - --server.headless=true
+    environment: *llm-environment
+    ports:
+      - "8501:8501"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health', timeout=2)"
+      interval: 10s
+      timeout: 3s
+      retries: 3

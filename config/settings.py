@@ -9,6 +9,7 @@ def _as_bool(value: str) -> bool:
 
 @dataclass(frozen=True)
 class Settings:
+    app_env: str = "development"
     llm_base_url: str = "http://127.0.0.1:11434/v1"
     llm_api_key: str = "ollama"
     llm_model: str = "qwen2.5-coder:7b"
@@ -27,6 +28,7 @@ class Settings:
     @classmethod
     def from_env(cls) -> "Settings":
         settings = cls(
+            app_env=os.getenv("APP_ENV", cls.app_env),
             llm_base_url=os.getenv("LLM_BASE_URL", cls.llm_base_url),
             llm_api_key=os.getenv("LLM_API_KEY", cls.llm_api_key),
             llm_model=os.getenv("LLM_MODEL", cls.llm_model),
@@ -54,6 +56,8 @@ class Settings:
         return settings
 
     def validate(self) -> None:
+        if self.app_env not in {"development", "production", "test"}:
+            raise ValueError("APP_ENV должен быть development, production или test")
         parsed = urlparse(self.llm_base_url)
         if parsed.scheme not in {"http", "https"} or not parsed.netloc:
             raise ValueError("LLM_BASE_URL должен быть абсолютным HTTP(S)-адресом")
@@ -65,4 +69,3 @@ class Settings:
             raise ValueError("LLM_TIMEOUT_SECONDS должен быть положительным")
         if self.cache_ttl_seconds <= 0:
             raise ValueError("CACHE_TTL_SECONDS должен быть положительным")
-

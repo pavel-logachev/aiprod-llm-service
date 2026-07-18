@@ -1,9 +1,13 @@
-.git
+.codex
 .env
+.git
+.github
+.ruff_cache
 .venv
 __pycache__
+*.log
 *.pyc
-tests
+docs
 evals
-test_report.md
-
+evidence
+tests
